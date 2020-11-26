@@ -4,7 +4,7 @@
   "description": "",
   "main": ".eslintrc.js",
   "scripts": {
-    "start": "webpack --config webpack.client.js && webpack --config webpack.server.js && node build/server.js",
+    "start": "node build/server.js",
     "build": "webpack --config webpack.client.js & webpack --config webpack.server.js",
     "build:start": "webpack --config webpack.client.js && webpack --config webpack.server.js && node build/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
