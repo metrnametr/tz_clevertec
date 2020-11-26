@@ -5,6 +5,8 @@ import path from 'path';
 import  React from 'react';
 import ReactDOMServer from'react-dom/server';
 import Loadable from 'react-loadable'
+import cors from 'cors'
+import axios from 'axios'
 
 import { Provider } from 'react-redux';
 import { createMemoryHistory } from 'history';
@@ -16,7 +18,7 @@ import configureStore from './src/store';
 import { routes } from './src/routes';
 import fs  from 'fs';
 import { serverSaga } from "./src/sagas";
-import cors from 'cors'
+
 
 const app = express();
 
