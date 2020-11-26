@@ -1,0 +1,35 @@
+@import '~arui-feather/vars.css';
+
+.header {
+    display: flex;
+    height: 80px;
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    background: #FEEFE5;
+    box-shadow: 0px 2px 15px #f0f0f0f0;
+} 
+
+.nav-container {
+    padding: 10px 50px;
+    width: 100%;
+    display: flex;
+    // justify-content: space-evenly;
+    align-items: center;
+    .nav-item {
+        a {
+            padding: 15px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            color: var(--color-content-alfa-on-white);
+            background: white;
+            text-transform: uppercase;
+            font-weight: 700;
+            &:hover, &.active {
+                background:  var(--color-content-alfa-on-white);
+                color: white;
+            }
+        }
+    }
+}
