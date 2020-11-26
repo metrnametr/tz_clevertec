@@ -16,15 +16,44 @@ import configureStore from './src/store';
 import { routes } from './src/routes';
 import fs  from 'fs';
 import { serverSaga } from "./src/sagas";
+import cors from 'cors'
 
 const app = express();
 
 
 const initialState = {}
 
+app.use(cors())
+app.use(express.json())
+
 app.use(express.static('./build'));
 
 const port = process.env.PORT || 3001;
+
+
+app.get('/tt/meta', async (req, res) => {
+    try {
+      const resData = await axios.get('http://test.clevertec.ru/tt/meta');
+      res.json(resData.data);
+    } catch(e) {
+      console.log(e)
+      res.send(401).send(e);
+    }
+  });
+  
+app.post('/tt/data', async (req, res) => {
+try {
+    const result = await axios.post('http://test.clevertec.ru/tt/data', {
+    form: {
+        ...req.body.data
+    }
+    });
+    res.json(result.data.result);
+} catch(e) {
+    console.log(e)
+    res.sendStatus(401).send(e);
+}
+})
 
 
 app.get('*', async (req, res) => {
@@ -50,7 +79,7 @@ app.get('*', async (req, res) => {
             
 
                 fs.readFile(path.resolve('./build/main.html'), 'utf-8', (err, data) => {
-                    console.log(data)
+                    console.log(port)
                     const page = createHtml(data, reactApp, serialize(store.getState()));
                     res.send(page);
                 })
