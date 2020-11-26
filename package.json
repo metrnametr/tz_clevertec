@@ -15,7 +15,8 @@
     "ssr:build-client": "webpack --config webpack.client.js --watch",
     "ssr:server": "nodemon --watch build --exec \"node build/server.js\"",
     "ssr:proxyServer": "nodemon ./proxyServer.js",
-    "build:client": "webpack --config ./webpack.client.js --mode production"
+    "build:client": "webpack --config ./webpack.client.js --mode production",
+    "heroku-prebuild": "npm install --dev"
   },
   "keywords": [],
   "author": "",
