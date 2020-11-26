@@ -7,6 +7,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const port = process.env.PORT || 3000;
+
 app.get('/tt/meta', async (req, res) => {
   try {
     const resData = await axios.get('http://test.clevertec.ru/tt/meta');
@@ -31,4 +33,4 @@ app.post('/tt/data', async (req, res) => {
   }
 })
 
-app.listen(3000, () => console.log('proxy server start'));
+app.listen(port, () => console.log('proxy server start'));

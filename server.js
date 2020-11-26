@@ -24,6 +24,8 @@ const initialState = {}
 
 app.use(express.static('./build'));
 
+const port = process.env.PORT || 3001;
+
 
 app.get('*', async (req, res) => {
     const url = req.originalUrl || req.url;
@@ -65,4 +67,4 @@ function createHtml(data, app, store){
             )
 }
 
-Loadable.preloadAll().then(() => app.listen(3001, () => console.log('server start')));
+Loadable.preloadAll().then(() => app.listen(port, () => console.log('server start')));
