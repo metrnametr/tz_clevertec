@@ -50,6 +50,7 @@ app.get('*', async (req, res) => {
             
 
                 fs.readFile(path.resolve('./build/main.html'), 'utf-8', (err, data) => {
+                    console.log(data)
                     const page = createHtml(data, reactApp, serialize(store.getState()));
                     res.send(page);
                 })
