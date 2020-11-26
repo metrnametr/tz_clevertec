@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { merge } = require('webpack-merge');
 const config = require('./config');
 
-const dev = process.env.NODE_ENV === 'development';
+const dev = process.env.NODE_ENV;
 
 const clientConfig = {
   entry: ['babel-polyfill', './src/index.js'],
@@ -57,7 +57,7 @@ const clientConfig = {
   plugins: [
     new HTMLWebpackPlugin({
       template: './src/index.html',
-      filename: dev ? './index.html' : './main.html',
+      filename: dev ? './main.html' : './index.html',
     }),
     new MiniCssExtractPlugin({
       filename: 'styles.css',
