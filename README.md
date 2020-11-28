@@ -1,8 +1,15 @@
-### Install
-**npm install**
+Getting started
+===============
 
-### Run spa
-**npm run dev**
+```sh
+$ npm install
+$ npm run dev
+    or
+$ npm run ssr
+```
 
-### Run ssr
-**npm run ssr**
+Service available on
+
+```sh
+localhost:3001 || 8080
+```
