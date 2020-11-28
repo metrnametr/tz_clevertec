@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Notification from 'arui-feather/notification';
 import {
-  split, slice, join, isEmpty, has
+  split, slice, join, isEmpty, has,
 } from 'lodash';
+import Notification from 'arui-feather/notification';
 
 import Form from '../../components/Form';
-import './style.scss';
-import { PRELOAD_FORM_META, GET_UNLOAD_FORM_META, SET_FORM_DATA_PENDING } from '../../actionTypes';
+import ModalCancelLoad from '../../components/ModalCancelLoad';
 
-import Spinner from '../../components/Spinner';
+import {
+  uploadFormMetaAction,
+  unloadFormMetaAction,
+  setFormDataAction,
+  cancelLoadAction,
+} from '../../actions';
+
+import './style.scss';
 
 const FormPage = () => {
   const [visibleNotice, setVisibleNotice] = useState(false);
@@ -19,16 +25,12 @@ const FormPage = () => {
   } = useSelector((state) => state.reducerForm);
   useEffect(() => {
     if (!loadedFormMeta) {
-      dispatch({
-        type: PRELOAD_FORM_META,
-      });
+      dispatch(uploadFormMetaAction());
     }
 
     return () => {
       if (loadedFormMeta) {
-        dispatch({
-          type: GET_UNLOAD_FORM_META,
-        });
+        dispatch(unloadFormMetaAction());
       }
     };
   }, [loadedFormMeta]);
@@ -37,10 +39,7 @@ const FormPage = () => {
     const payload = has(formData, 'numeric')
       ? { ...formData, numeric: formData.numeric && +formData.numeric }
       : formData;
-    dispatch({
-      type: SET_FORM_DATA_PENDING,
-      payload,
-    });
+    dispatch(setFormDataAction(payload));
   };
 
   useEffect(() => {
@@ -49,12 +48,22 @@ const FormPage = () => {
     }
   }, [pending, result]);
 
+  const cancelLoad = () => {
+    dispatch(cancelLoadAction());
+  };
+
   return (
     <div className="form-wrapper">
       {
-        loading || isEmpty(formMeta) ? <Spinner />
+        loading || isEmpty(formMeta) ? (
+          null
+        )
           : <Form formMeta={formMeta} setFormData={setFormData} />
       }
+      <ModalCancelLoad
+        cancel={cancelLoad}
+        pending={pending}
+      />
       <Notification
         offset={12}
         onCloserClick={() => {

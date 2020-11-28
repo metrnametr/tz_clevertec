@@ -1,13 +1,20 @@
-// const { FORM_FIELDS_REQUESTED, FORM_FIELDS_SUCCESSED } = require("../actionTypes");
+import {
+  FORM_META_REQUESTED, GET_UNLOAD_FORM_META, SET_FORM_DATA_PENDING, CANCEL_LOAD_REQUEST,
+} from '../actionTypes';
 
-// const requestFormFieldsAction = () => ({
-//     type: FORM_FIELDS_REQUESTED
-// })
+export const uploadFormMetaAction = () => ({
+  type: FORM_META_REQUESTED,
+});
 
-// const successFormFieldsAction = () => ({
-//     type: FORM_FIELDS_SUCCESSED
-// })
+export const unloadFormMetaAction = () => ({
+  type: GET_UNLOAD_FORM_META,
+});
 
-// const failFormFieldsAction = () => ({
-//     type: FORM_FIELDS_SUCCESSED
-// })
+export const setFormDataAction = (payload) => ({
+  type: SET_FORM_DATA_PENDING,
+  payload,
+});
+
+export const cancelLoadAction = () => ({
+  type: CANCEL_LOAD_REQUEST,
+});

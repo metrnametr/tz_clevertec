@@ -2,7 +2,6 @@ import {
   call, put, takeEvery, all, fork,
 } from 'redux-saga/effects';
 import {
-  PRELOAD_FORM_META,
   UNLOAD_FORM_META,
   GET_UNLOAD_FORM_META,
   FORM_META_REQUESTED,
@@ -11,22 +10,38 @@ import {
   SET_FORM_DATA_PENDING,
   SET_FORM_DATA_SUCCESSED,
   SET_FORM_DATA_FAILED,
+  CANCEL_LOAD,
+  CANCEL_LOAD_REQUEST,
 } from '../actionTypes';
 
 import Api from '../Api';
 
-function* fetchFormMeta() {
-  yield put({ type: FORM_META_REQUESTED });
+function* getFormMeta() {
   try {
-    const formMeta = yield call(Api.fetchFormMeta);
+    const formMeta = yield call(Api.getFormMeta);
     yield put({ type: FORM_META_SUCCESSED, payload: formMeta });
   } catch (e) {
     yield put({ type: FORM_META_FAILED, message: e.message });
   }
 }
 
-function* formMetaSaga() {
-  yield takeEvery(PRELOAD_FORM_META, fetchFormMeta);
+function* cancelLoad() {
+  try {
+    // eslint-disable-next-line no-unused-expressions
+    yield call(Api.cancelLoad);
+    yield put({ type: CANCEL_LOAD });
+  } catch (e) {
+    // eslint-disable-next-line no-console
+    console.log(e);
+  }
+}
+
+function* watchCanselFormMetaSaga() {
+  yield takeEvery(CANCEL_LOAD_REQUEST, cancelLoad);
+}
+
+function* watchFormMeta() {
+  yield takeEvery(FORM_META_REQUESTED, getFormMeta);
 }
 
 function* setFormData(action) {
@@ -51,25 +66,26 @@ function* watchUnloadFormMeta() {
   yield takeEvery(GET_UNLOAD_FORM_META, unloadFormMeta);
 }
 
-function* watchFetchFormMeta() {
-  yield fork(fetchFormMeta);
+function* watchGetFormMeta() {
+  yield fork(getFormMeta);
 }
 
 const sagas = [
   fork(watchSetFormData),
-  fork(formMetaSaga),
+  fork(watchFormMeta),
   fork(watchUnloadFormMeta),
+  fork(watchCanselFormMetaSaga),
 ];
 
-export function* clientSaga() {
+export function* clientFormSaga() {
   yield all([
     ...sagas,
   ]);
 }
 
-export function* serverSaga() {
+export function* serverFormSaga() {
   yield all([
-    fork(watchFetchFormMeta),
+    fork(watchGetFormMeta),
     ...sagas,
   ]);
 }

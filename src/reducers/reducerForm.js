@@ -1,8 +1,9 @@
 import {
-  has, get, mergeWith,
+  has, get,
 } from 'lodash';
 import {
   UNLOAD_FORM_META,
+  CANCEL_LOAD,
   FORM_META_REQUESTED,
   FORM_META_SUCCESSED,
   FORM_META_FAILED,
@@ -14,6 +15,7 @@ import {
 const initialStateForm = {
   formMeta: {},
   errorFormMetaMessage: '',
+  cancelGetFormMeta: false,
   loading: false,
   pending: false,
   loadedFormMeta: false,
@@ -22,21 +24,52 @@ const initialStateForm = {
 };
 
 const reducerFormSwitch = {
-  [FORM_META_REQUESTED]: (state) => ({ ...state, loading: true, loadedFormMeta: false }),
+  [FORM_META_REQUESTED]: (state) => ({
+    ...state,
+    loading: true,
+    loadedFormMeta: false,
+    cancelGetFormMeta: false,
+    pending: true,
+  }),
   [FORM_META_SUCCESSED]: (state, payload) => ({
-    ...state, loading: false, formMeta: payload, loadedFormMeta: true,
+    ...state,
+    loading: false,
+    formMeta: payload,
+    loadedFormMeta: true,
+    pending: false,
   }),
-  [FORM_META_FAILED]: (state, payload) => (
-    {
-      ...state, loading: false, loadedFormMeta: true, errorFormMetaMessage: payload,
-    }),
+  [FORM_META_FAILED]: (state, payload) => ({
+    ...state,
+    loading: false,
+    loadedFormMeta: true,
+    errorFormMetaMessage: payload,
+    pending: false,
+  }),
   [UNLOAD_FORM_META]: (state) => ({
-    ...state, loadedFormMeta: false, pending: false, result: {},
+    ...state,
+    loadedFormMeta: false,
+    pending: false,
+    formMeta: {},
+    result: {},
   }),
-  [SET_FORM_DATA_PENDING]: (state) => ({ ...state, pending: true }),
-  [SET_FORM_DATA_SUCCESSED]: (state, payload) => ({ ...state, pending: false, result: payload }),
-  [SET_FORM_DATA_FAILED]: (state, payload) => (
-    { ...state, pending: false, errorSetFormMessage: payload }),
+  [CANCEL_LOAD]: (state) => ({
+    ...state,
+    pending: false,
+  }),
+  [SET_FORM_DATA_PENDING]: (state) => ({
+    ...state,
+    pending: true,
+  }),
+  [SET_FORM_DATA_SUCCESSED]: (state, payload) => ({
+    ...state,
+    pending: false,
+    result: payload,
+  }),
+  [SET_FORM_DATA_FAILED]: (state, payload) => ({
+    ...state,
+    pending: false,
+    errorSetFormMessage: payload,
+  }),
 };
 
 const reducerForm = (

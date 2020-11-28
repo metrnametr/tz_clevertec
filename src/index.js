@@ -9,7 +9,7 @@ import Header from './components/Header';
 import { routes } from './routes';
 import configureStore from './store';
 import './app.scss';
-import { clientSaga } from './sagas';
+import { clientFormSaga } from './sagas';
 
 // eslint-disable-next-line no-undef
 const initialState = window.__INITIAL_DATA__ || {};
@@ -26,7 +26,7 @@ const store = configureStore(initialState, history);
 // eslint-disable-next-line no-constant-condition
 const renderMethod = typeof window ? ReactDOM.render : ReactDOM.hydrate;
 
-store.runSaga(clientSaga);
+store.runSaga(clientFormSaga);
 
 const helpers = {};
 

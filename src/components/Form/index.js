@@ -1,4 +1,6 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import { toPairs, map, reduce } from 'lodash';
 import GridCol from 'arui-feather/grid-col';
 import GridRow from 'arui-feather/grid-row';
@@ -6,7 +8,7 @@ import Input from 'arui-feather/input';
 import Select from 'arui-feather/select';
 import Heading from 'arui-feather/heading';
 import Button from 'arui-feather/button';
-import Form from 'arui-feather/form';
+import { Form as ArForm } from 'arui-feather/form';
 import { numberWithDot } from '../../tools';
 
 import './style.scss';
@@ -29,7 +31,7 @@ const createFormField = ({ type, name, values }, fieldsValues, onChange) => {
   }
 };
 
-export default ({ formMeta: { image, title, fields }, setFormData }) => {
+const Form = ({ formMeta: { image, title, fields }, setFormData }) => {
   const [formValues, setFormValues] = useState(reduce(
     fields, (formStateValues, { name }) => ({ ...formStateValues, [name]: name === 'list' ? 'none' : '' }), {},
   ));
@@ -39,12 +41,11 @@ export default ({ formMeta: { image, title, fields }, setFormData }) => {
       [name]: name === 'list' ? value[0] : value,
     });
   }, [formValues]);
-
   const onSubmit = useCallback(() => setFormData(formValues), [formValues]);
   return (
     <div className="form-container">
       <Heading size="m">{title}</Heading>
-      <Form onSubmit={onSubmit}>
+      <ArForm onSubmit={onSubmit}>
         {
                 fields.map((it) => (
                   <GridRow key={it.name} align="middle">
@@ -63,15 +64,34 @@ export default ({ formMeta: { image, title, fields }, setFormData }) => {
         <GridRow justify="right">
           <Button
             className="btn-submit-form"
-          // onClick={() => console.log(formValues)}
             type="submit"
             view="extra"
           >
             Отправить данные
           </Button>
         </GridRow>
-      </Form>
+      </ArForm>
       <img alt="logo" src={image} style={{ width: '100%', marginTop: '50px' }} />
     </div>
   );
 };
+
+Form.propTypes = {
+  formMeta: PropTypes.shape({
+    fields: PropTypes.arrayOf(
+      PropTypes.shape(
+        {
+          name: PropTypes.string,
+          title: PropTypes.string,
+          type: PropTypes.string,
+          values: PropTypes.object,
+        },
+      ),
+    ),
+    image: PropTypes.string,
+    title: PropTypes.string,
+  }).isRequired,
+  setFormData: PropTypes.func.isRequired,
+};
+
+export default Form;
